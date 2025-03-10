@@ -1,33 +1,23 @@
 class Solution {
     public:
-        bool allZero(vector<int>& counter){
-            for(int i : counter){
-                if(i!=0){
-                    return false;
-                }
-            }
-            return true;
-        }
-        vector<int> findAnagrams(string s, string p) {
-            vector<int>result;
-            int i=0;
-            int j=0;
-            int k = p.length();
-            vector<int>counter(26,0);
-            for(char c : p){
-                counter[c-'a']++;
-            }
-            while(j<s.length()){
-                counter[s[j]-'a']--;
-                if(j-i+1 == p.length()){
-                    if(allZero(counter)){
-                        result.push_back(i);
-                    }
-                    counter[s[i]-'a']++;
+        int minSubArrayLen(int target, vector<int>& nums) {
+            int i = 0, j = 0;
+            int sum = 0;
+            int minLen = INT_MAX;
+    
+            while (j < nums.size()) {
+                sum += nums[j];
+    
+                while (sum >= target) { 
+                    minLen = min(minLen, j - i + 1);
+                    sum -= nums[i];
                     i++;
                 }
+    
                 j++;
             }
-            return result;
+    
+            return minLen == INT_MAX ? 0 : minLen;
         }
     };
+    
