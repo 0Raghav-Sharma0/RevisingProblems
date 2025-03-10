@@ -1,23 +1,34 @@
 class Solution {
     public:
-        int minSubArrayLen(int target, vector<int>& nums) {
-            int i = 0, j = 0;
-            int sum = 0;
-            int minLen = INT_MAX;
+        string minWindow(string s, string t) {
+            if (s.empty() || t.empty()) return "";
     
-            while (j < nums.size()) {
-                sum += nums[j];
+            vector<int> counter(128, 0); 
+            for (char c : t) counter[c]++;
     
-                while (sum >= target) { 
-                    minLen = min(minLen, j - i + 1);
-                    sum -= nums[i];
-                    i++;
+            int left = 0, right = 0, minLen = INT_MAX, start = 0;
+            int required = t.size(), formed = 0;
+    
+            while (right < s.size()) {
+                      if (--counter[s[right]] >= 0) {
+                    formed++;
                 }
     
-                j++;
+                while (formed == required) {
+                    if (right - left + 1 < minLen) {
+                        minLen = right - left + 1;
+                        start = left;
+                    }
+    
+                    if (++counter[s[left]] > 0) {
+                        formed--;
+                    }
+                    left++;
+                }
+                right++;
             }
     
-            return minLen == INT_MAX ? 0 : minLen;
+            return minLen == INT_MAX ? "" : s.substr(start, minLen);
         }
     };
     
